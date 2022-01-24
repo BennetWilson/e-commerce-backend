@@ -3,32 +3,31 @@ const Product = require('./Product');
 const Category = require('./Category');
 const Tag = require('./Tag');
 const ProductTag = require('./ProductTag');
-const { FOREIGNKEYS } = require('sequelize/types/lib/query-types');
+// const { FOREIGNKEYS } = require('sequelize/types/lib/query-types');
 
 // Products belongsTo Category
 Product.belongsTo(Category, {
   foreignKey: 'category_id',
+  onDelete: 'cascade'
 })
 
 // Categories have many Products
 Category.hasMany(Product, {
-  foreignKey: 'id'
+  foreignKey: 'category_id'
 })
 
 // Products belongToMany Tags (through ProductTag)
-Product.belongsToMany(ProductTag, {
-  through: {
-      model: ProductTag,
-      unique: false
-  }
+Product.belongsToMany(Tag, {
+  through: ProductTag, 
+  foreignKey: 'product_id'
+    
+  
 });
 
 // Tags belongToMany Products (through ProductTag)
 Tag.belongsToMany(Product, {
-  through: {
-      model: ProductTag,
-      unique: false
-  }
+  through: ProductTag,
+  foreignKey: 'tag_id'
 });
 
 
