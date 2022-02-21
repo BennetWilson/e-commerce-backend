@@ -6,7 +6,7 @@ const { Product, Category, Tag, ProductTag } = require('../../models');
 // get all products
 router.get('/', async (req, res) => {
   // find all products
-  // be sure to include its associated Category and Tag data\
+
   try {
     const productRoutesData = await Product.findAll (
       {
@@ -21,7 +21,7 @@ router.get('/', async (req, res) => {
 // get one product
 router.get('/:id',async  (req, res) => {
   // find a single product by its `id`
-  // be sure to include its associated Category and Tag data
+  
   try {
     const productroutesData = await Product.findByPk(req.params.id, {
       include: [{ model: Category }, {model: Tag}],
@@ -46,17 +46,10 @@ router.post('/', async (req, res) => {
   } catch (err) {
     res.status(400).json(err);
   }
-  /* req.body should look like this...
-    {
-      product_name: "Basketball",
-      price: 200.00,
-      stock: 3,
-      tagIds: [1, 2, 3, 4]
-    }
-  */
+
   Product.create(req.body)
     .then((product) => {
-      // if there's product tags, we need to create pairings to bulk create in the ProductTag model
+      
       if (req.body.tagIds.length) {
         const productTagIdArr = req.body.tagIds.map((tag_id) => {
           return {
